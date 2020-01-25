@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class EmployeeModel(
-    @PrimaryKey val id: Int, val name: String = "",
+    @PrimaryKey val id: Int,
+    val name: String = "",
     val position: String = "",
     val salary: String = "",
     val phone: String = "",
