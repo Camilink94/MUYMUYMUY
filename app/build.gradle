@@ -24,7 +24,7 @@ android {
 }
 
 ext.room_version = "2.2.3"
-ext.retrofit_version = "2.3.0"
+ext.retrofit_version = "2.7.1"
 ext.okhttp_version = "4.3.1"
 
 dependencies {
@@ -40,6 +40,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version" // Retrofit Scalars Converter
 
     //Anko
     implementation 'org.jetbrains.anko:anko-common:0.9'
