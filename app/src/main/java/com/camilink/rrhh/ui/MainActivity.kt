@@ -1,7 +1,8 @@
-package com.camilink.rrhh
+package com.camilink.rrhh.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.camilink.rrhh.R
 
 class MainActivity : AppCompatActivity() {
 
