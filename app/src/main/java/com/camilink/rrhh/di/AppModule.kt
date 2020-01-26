@@ -2,10 +2,17 @@ package com.camilink.rrhh.di
 
 import com.camilink.rrhh.presenter.EmployeePresenter
 import com.camilink.rrhh.presenter.EmployeePresenterContract
+import com.camilink.rrhh.repository.service.EmployeeService
 import org.koin.dsl.module
 
 val appModule = module {
 
-    factory { (view: EmployeePresenterContract.IView) -> EmployeePresenter(view) as EmployeePresenterContract.IPresenter }
+    //Presenter
+    factory<EmployeePresenterContract.IPresenter> { (view: EmployeePresenterContract.IView) ->
+        EmployeePresenter(view)
+    }
+
+    //Service
+    single { (listener: EmployeeService.Listener) -> EmployeeService(listener) }
 
 }
