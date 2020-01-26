@@ -6,9 +6,9 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
-class EmployeeRepository(val listener: Listener) : KoinComponent, EmployeeService.Listener {
+class EmployeeRepository(private val listener: Listener) : KoinComponent, EmployeeService.Listener {
 
-    val service by inject<EmployeeService> { parametersOf(this) }
+    private val service by inject<EmployeeService> { parametersOf(this) }
 
     fun getLatestEmployees() {
         service.getEmployees()
