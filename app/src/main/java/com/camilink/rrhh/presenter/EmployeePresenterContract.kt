@@ -14,5 +14,7 @@ class EmployeePresenterContract {
 
         fun setLatestEmployees(employees: ArrayList<EmployeeModel>)
 
+        fun connError()
+        fun dataError()
     }
 }
