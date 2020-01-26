@@ -32,6 +32,7 @@ android {
 ext.room_version = "2.2.3"
 ext.retrofit_version = "2.7.1"
 ext.okhttp_version = "4.3.1"
+ext.koin_version = "2.0.1"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,11 +43,15 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
+    //Koin
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version" // Retrofit Scalars Converter
+    // Retrofit Scalars Converter
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
 
     //Anko
     implementation 'org.jetbrains.anko:anko-common:0.9'
