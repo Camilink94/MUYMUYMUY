@@ -85,11 +85,11 @@ class DetailFragment : Fragment(),
     }
 
     override fun showLoading() {
-
+        (activity as MainActivity).showLoading()
     }
 
     override fun hideLoading() {
-
+        (activity as MainActivity).hideLoading()
     }
     //endregion
 

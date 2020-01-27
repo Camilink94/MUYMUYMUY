@@ -97,11 +97,11 @@ class ListFragment : Fragment(),
     }
 
     override fun showLoading() {
-
+        (activity as MainActivity).showLoading()
     }
 
     override fun hideLoading() {
-
+        (activity as MainActivity).hideLoading()
     }
     //endregion
 
@@ -112,7 +112,7 @@ class ListFragment : Fragment(),
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
-        Log.d("AAAA","Mark from fragment")
+        Log.d("AAAA", "Mark from fragment")
         presenter.markNewEmployee(employeeId, new)
     }
     //endregion

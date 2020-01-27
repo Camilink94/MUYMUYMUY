@@ -14,31 +14,40 @@ class NewEmployeeListPresenter(val view: NewEmployeeListPresenterContract.IView)
 
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
+    //region Presenter
     override fun getNewEmployees() {
+        view.showLoading()
         repository.getNewEmployees()
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        view.showLoading()
         repository.markAsNew(employeeId, new)
     }
+    //endregion
 
+    //regionRepo Listener
     override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
         view.setNewEmployees(employees)
+        view.hideLoading()
     }
 
     override fun connError() {
-
+        view.hideLoading()
     }
 
     override fun dataError() {
-
+        view.hideLoading()
     }
 
     override fun markNewEmployeeSuccess() {
         //view.markNewEmployeeSuccess()
+        view.hideLoading()
     }
 
     override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
-
+        view.hideLoading()
+        view.markNewEmployeeNotExists(employeeId)
     }
+    //endregion
 }
