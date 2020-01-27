@@ -1,4 +1,4 @@
-package com.camilink.rrhh.presenter
+package com.camilink.rrhh.presenter.contract
 
 import com.camilink.rrhh.models.EmployeeModel
 

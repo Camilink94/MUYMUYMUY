@@ -9,11 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
-import com.camilink.rrhh.presenter.AllEmployeesListPresenterContract
-import kotlinx.android.synthetic.*
+import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent

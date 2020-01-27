@@ -10,8 +10,13 @@ import androidx.navigation.fragment.navArgs
 
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.presenter.contract.EmployeeDetailsPresenterContract
+import kotlinx.android.synthetic.main.fragment_detail.*
+import org.koin.core.KoinComponent
 
-class DetailFragment : Fragment() {
+class DetailFragment : Fragment(),
+    KoinComponent,
+    EmployeeDetailsPresenterContract.IView {
 
     private var listener: Listener? = null
 
@@ -28,7 +33,37 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         employee = args.employee
+
+        detail_name.text = employee.name
+        detail_position.text = employee.position
+        detail_new.isChecked = employee.isNew
+
+        detail_new.setOnCheckedChangeListener { buttonView, isChecked ->
+
+        }
     }
+
+    //region View
+    override fun setRespondingEmployees(employees: ArrayList<EmployeeModel>) {
+
+    }
+
+    override fun markNewEmployeeSuccess() {
+
+    }
+
+    override fun markNewEmployeeNotExists(employeeId: Int) {
+
+    }
+
+    override fun showLoading() {
+
+    }
+
+    override fun hideLoading() {
+
+    }
+    //endregion
 
     interface Listener {
     }

@@ -2,7 +2,7 @@ package com.camilink.rrhh.di
 
 import androidx.room.Room
 import com.camilink.rrhh.presenter.AllEmployeeListPresenter
-import com.camilink.rrhh.presenter.AllEmployeesListPresenterContract
+import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import com.camilink.rrhh.repository.EmployeeRepository
 import com.camilink.rrhh.repository.db.EmployeeRoomDatabase
 import com.camilink.rrhh.repository.service.EmployeeService

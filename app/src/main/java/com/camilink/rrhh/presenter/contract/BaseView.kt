@@ -1,4 +1,4 @@
-package com.camilink.rrhh.presenter
+package com.camilink.rrhh.presenter.contract
 
 interface BaseView {
     fun showLoading()
