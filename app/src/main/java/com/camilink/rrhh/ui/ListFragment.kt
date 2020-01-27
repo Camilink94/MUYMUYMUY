@@ -13,9 +13,6 @@ import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
 import kotlinx.android.synthetic.main.fragment_list.*
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class ListFragment : Fragment(), EmployeeListAdapter.Listener {
 
     private var param1: String? = null
@@ -24,23 +21,12 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
 
     private val adapter: EmployeeListAdapter = EmployeeListAdapter(this)
 
-    //region OnCreate(View)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
-    //endregion
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,13 +53,19 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         }
     }
 
+    //region Adapter Listener
     override fun selectEmployee(employee: EmployeeModel) {
         val action = ListFragmentDirections.actionListFragmentToDetailFragment(employee)
         findNavController().navigate(action)
     }
 
-    interface Listener {
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        listener?.markNewEmployeeFromList(employeeId, new)
+    }
+    //endregion
 
+    interface Listener {
+        fun markNewEmployeeFromList(employeeId: Int, new: Boolean)
     }
 
     //region Attach Listener
@@ -89,17 +81,6 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
     //endregion
 }

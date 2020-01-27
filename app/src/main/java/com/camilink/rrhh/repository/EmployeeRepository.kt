@@ -21,6 +21,23 @@ class EmployeeRepository(private val listener: Listener) :
         service.getEmployees()
     }
 
+    fun markAsNew(employeeId: Int, new: Boolean) {
+        doAsync {
+            val cacheEmployee = database.getEmployee(employeeId)
+            cacheEmployee?.let {
+                it.isNew = new
+                database.updateSingleEmployee(it)
+            }
+            uiThread {
+                if (cacheEmployee == null) {
+                    listener.markNewEmployeeNotExists()
+                } else {
+                    listener.markNewEmployeeSuccess()
+                }
+            }
+        }
+    }
+
     //region Service Listener
     override fun gotEmployees(employeesFromService: ArrayList<EmployeeModel>) {
         doAsync {
@@ -34,7 +51,7 @@ class EmployeeRepository(private val listener: Listener) :
                     database.updateSingleEmployee(
                         employeeFromService.apply {
                             //Keep new state from cached row
-                            new = cacheEmployee.new
+                            isNew = cacheEmployee.isNew
                         }
                     )
                 }
@@ -60,6 +77,9 @@ class EmployeeRepository(private val listener: Listener) :
         fun gotEmployees(employees: ArrayList<EmployeeModel>)
         fun connError()
         fun dataError()
+
+        fun markNewEmployeeSuccess()
+        fun markNewEmployeeNotExists()
     }
 
 }

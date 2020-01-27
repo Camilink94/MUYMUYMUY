@@ -13,10 +13,21 @@ class EmployeePresenter(private val view: EmployeePresenterContract.IView) :
 
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
+    //region Presenter Contract
     override fun getLatestEmployees() {
         repository.getLatestEmployees()
     }
 
+    override fun getNewEmployees() {
+
+    }
+
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        repository.markAsNew(employeeId, new)
+    }
+    //endregion
+
+    //region Repository Listener
     override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
         view.setLatestEmployees(employees)
     }
@@ -28,5 +39,14 @@ class EmployeePresenter(private val view: EmployeePresenterContract.IView) :
     override fun dataError() {
         view.dataError()
     }
+
+    override fun markNewEmployeeSuccess() {
+
+    }
+
+    override fun markNewEmployeeNotExists() {
+
+    }
+    //endregion
 
 }

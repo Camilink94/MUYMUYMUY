@@ -44,6 +44,10 @@ class MainActivity : AppCompatActivity(),
         listFrag?.setLatestEmployees(employees)
     }
 
+    override fun setNewEmployees(employees: ArrayList<EmployeeModel>) {
+
+    }
+
     override fun connError() {
 
     }
@@ -51,6 +55,14 @@ class MainActivity : AppCompatActivity(),
     override fun dataError() {
 
     }
+    //endregion
+
+    //region ListFragment Listener
+
+    override fun markNewEmployeeFromList(employeeId: Int, new: Boolean) {
+        presenter.markNewEmployee(employeeId, new)
+    }
+
     //endregion
 
 }
