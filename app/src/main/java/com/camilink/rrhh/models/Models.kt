@@ -1,10 +1,13 @@
 package com.camilink.rrhh.models
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity
+@Parcelize
 data class EmployeeModel(
     @PrimaryKey val id: Int,
     val name: String = "",
@@ -12,5 +15,6 @@ data class EmployeeModel(
     val salary: String = "",
     val phone: String = "",
     val email: String = "",
-    @ColumnInfo(name = "upper_relation") val upperRelation: Int = 0
-)
+    @ColumnInfo(name = "upper_relation") val upperRelation: Int = 0,
+    val new: Boolean = false
+) : Parcelable
