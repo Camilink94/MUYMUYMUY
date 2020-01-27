@@ -4,9 +4,10 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.camilink.rrhh.repository.db.EmployeeDatabase
 import kotlinx.android.parcel.Parcelize
 
-@Entity
+@Entity(tableName = EmployeeDatabase.employeeTableName)
 @Parcelize
 data class EmployeeModel(
     @PrimaryKey val id: Int,
