@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.holder_employee.*
 class EmployeeListAdapter(val listener: Listener) :
     RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>() {
 
-    private val employees = ArrayList<EmployeeModel>()
+    val employees = ArrayList<EmployeeModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

@@ -36,7 +36,7 @@ class EmployeeDetailsPresenter(val view: EmployeeDetailsPresenterContract.IView)
     override fun markNewEmployeeSuccess() {
     }
 
-    override fun markNewEmployeeNotExists() {
+    override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
     }
     //endregion
 

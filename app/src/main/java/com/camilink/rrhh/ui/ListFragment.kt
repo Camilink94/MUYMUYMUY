@@ -81,8 +81,11 @@ class ListFragment : Fragment(),
 
     }
 
-    override fun markNewEmployeeNotExists() {
-
+    override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
+        (list_allRv.adapter as EmployeeListAdapter).apply {
+            employees.find { id == employeeId }?.isNew = !new
+            notifyDataSetChanged()
+        }
     }
 
     override fun connError() {
@@ -109,6 +112,7 @@ class ListFragment : Fragment(),
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        Log.d("AAAA","Mark from fragment")
         presenter.markNewEmployee(employeeId, new)
     }
     //endregion

@@ -38,7 +38,7 @@ class NewEmployeeListPresenter(val view: NewEmployeeListPresenterContract.IView)
 
     }
 
-    override fun markNewEmployeeNotExists() {
+    override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
 
     }
 }

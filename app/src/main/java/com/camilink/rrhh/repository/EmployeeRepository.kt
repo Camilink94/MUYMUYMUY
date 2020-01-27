@@ -18,11 +18,15 @@ class EmployeeRepository(private val listener: Listener) :
     private val database = EmployeeDatabaseEntryPoint()
 
     fun getEmployees() {
-        val dbEmployees = database.getAllEmployees()
-        if (dbEmployees.isNotEmpty()) {
-            listener.gotEmployees(dbEmployees as ArrayList<EmployeeModel>)
-        } else {
-            getLatestEmployees()
+        doAsync {
+            val dbEmployees = database.getAllEmployees()
+            uiThread {
+                if (dbEmployees.isNotEmpty()) {
+                    listener.gotEmployees(dbEmployees as ArrayList<EmployeeModel>)
+                } else {
+                    getLatestEmployees()
+                }
+            }
         }
     }
 
@@ -50,14 +54,16 @@ class EmployeeRepository(private val listener: Listener) :
 
     fun markAsNew(employeeId: Int, new: Boolean) {
         doAsync {
+            Log.d("AAAA", "Getting $employeeId")
             val cacheEmployee = database.getEmployee(employeeId)
             cacheEmployee?.let {
+                Log.d("AAAA", "Got ${it.id}")
                 it.isNew = new
                 database.updateSingleEmployee(it)
             }
             uiThread {
                 if (cacheEmployee == null) {
-                    listener.markNewEmployeeNotExists()
+                    listener.markNewEmployeeNotExists(employeeId, new)
                 } else {
                     listener.markNewEmployeeSuccess()
                 }
@@ -106,7 +112,7 @@ class EmployeeRepository(private val listener: Listener) :
         fun dataError()
 
         fun markNewEmployeeSuccess()
-        fun markNewEmployeeNotExists()
+        fun markNewEmployeeNotExists(employeeId: Int, new: Boolean)
     }
 
 }

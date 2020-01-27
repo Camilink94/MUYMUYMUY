@@ -1,5 +1,6 @@
 package com.camilink.rrhh.presenter
 
+import android.util.Log
 import com.camilink.rrhh.models.EmployeeModel
 import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import com.camilink.rrhh.repository.EmployeeRepository
@@ -23,6 +24,7 @@ class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContra
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        Log.d("AAAA", "Mark from presenter")
         repository.markAsNew(employeeId, new)
     }
     //endregion
@@ -41,10 +43,10 @@ class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContra
     }
 
     override fun markNewEmployeeSuccess() {
-
+        //getAllEmployees()
     }
 
-    override fun markNewEmployeeNotExists() {
+    override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
 
     }
     //endregion
