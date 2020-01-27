@@ -9,17 +9,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.presenter.AllEmployeesListPresenterContract
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_list.*
+import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.parameter.parametersOf
 
-class ListFragment : Fragment(), EmployeeListAdapter.Listener {
+class ListFragment : Fragment(),
+    KoinComponent,
+    AllEmployeesListPresenterContract.IView,
+    EmployeeListAdapter.Listener {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private val presenter: AllEmployeesListPresenterContract.IPresenter by inject {
+        parametersOf(
+            this
+        )
+    }
+
     private var listener: Listener? = null
-
-    private val adapter: EmployeeListAdapter = EmployeeListAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -35,8 +46,10 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         list_allRv.apply {
             layoutManager =
                 LinearLayoutManager(this@ListFragment.context, LinearLayoutManager.VERTICAL, false)
-            adapter = this@ListFragment.adapter
+            adapter = EmployeeListAdapter(this@ListFragment)
         }
+
+        presenter.getLatestEmployees()
     }
 
     private fun seeNewEmployees() {
@@ -44,7 +57,8 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         findNavController().navigate(action)
     }
 
-    fun setLatestEmployees(employees: ArrayList<EmployeeModel>) {
+    //region View
+    override fun setEmployees(employees: ArrayList<EmployeeModel>) {
         Log.d("AAAA", "Recieved ${employees.size} employees:\n$employees")
 
         (list_allRv.adapter as EmployeeListAdapter).apply {
@@ -53,6 +67,23 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         }
     }
 
+    override fun connError() {
+
+    }
+
+    override fun dataError() {
+
+    }
+
+    override fun showLoading() {
+
+    }
+
+    override fun hideLoading() {
+
+    }
+    //endregion
+
     //region Adapter Listener
     override fun selectEmployee(employee: EmployeeModel) {
         val action = ListFragmentDirections.actionListFragmentToDetailFragment(employee)
@@ -60,12 +91,11 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
-        listener?.markNewEmployeeFromList(employeeId, new)
+        presenter.markNewEmployee(employeeId, new)
     }
     //endregion
 
     interface Listener {
-        fun markNewEmployeeFromList(employeeId: Int, new: Boolean)
     }
 
     //region Attach Listener

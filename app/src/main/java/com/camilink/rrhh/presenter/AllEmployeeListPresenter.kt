@@ -6,20 +6,19 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
-class EmployeePresenter(private val view: EmployeePresenterContract.IView) :
+class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContract.IView) :
     KoinComponent,
-    EmployeePresenterContract.IPresenter,
+    AllEmployeesListPresenterContract.IPresenter,
     EmployeeRepository.Listener {
 
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
-    //region Presenter Contract
-    override fun getLatestEmployees() {
-        repository.getLatestEmployees()
+    override fun getAllEmployees() {
+        repository.getEmployees()
     }
 
-    override fun getNewEmployees() {
-
+    override fun getLatestEmployees() {
+        repository.getLatestEmployees()
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
@@ -29,7 +28,7 @@ class EmployeePresenter(private val view: EmployeePresenterContract.IView) :
 
     //region Repository Listener
     override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
-        view.setLatestEmployees(employees)
+        view.setEmployees(employees)
     }
 
     override fun connError() {

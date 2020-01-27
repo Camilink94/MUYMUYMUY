@@ -17,6 +17,15 @@ class EmployeeRepository(private val listener: Listener) :
     private val service by inject<EmployeeService> { parametersOf(this) }
     private val database = EmployeeDatabaseEntryPoint()
 
+    fun getEmployees() {
+        val dbEmployees = database.getAllEmployees()
+        if (dbEmployees.isNotEmpty()) {
+            listener.gotEmployees(dbEmployees as ArrayList<EmployeeModel>)
+        } else {
+            getLatestEmployees()
+        }
+    }
+
     fun getLatestEmployees() {
         service.getEmployees()
     }
