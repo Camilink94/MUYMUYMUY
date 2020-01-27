@@ -16,13 +16,13 @@ import kotlinx.android.synthetic.main.fragment_list.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), EmployeeListAdapter.Listener {
 
     private var param1: String? = null
     private var param2: String? = null
     private var listener: Listener? = null
 
-    private val adapter: EmployeeListAdapter = EmployeeListAdapter()
+    private val adapter: EmployeeListAdapter = EmployeeListAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +65,11 @@ class ListFragment : Fragment() {
         }
     }
 
+    override fun selectEmployee(employee: EmployeeModel) {
+        val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+        findNavController().navigate(action)
+    }
+
     //region Attach Listener
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -82,6 +87,7 @@ class ListFragment : Fragment() {
     //endregion
 
     interface Listener {
+
     }
 
     companion object {

@@ -9,7 +9,8 @@ import com.camilink.rrhh.models.EmployeeModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.holder_employee.*
 
-class EmployeeListAdapter : RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>() {
+class EmployeeListAdapter(val listener: Listener) :
+    RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>() {
 
     private val employees = ArrayList<EmployeeModel>()
 
@@ -30,7 +31,8 @@ class EmployeeListAdapter : RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>
         employees.addAll(newEmployees)
     }
 
-    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+    inner class ViewHolder(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView),
         LayoutContainer {
 
         fun bindHolder(employee: EmployeeModel) {
@@ -39,8 +41,15 @@ class EmployeeListAdapter : RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>
             holder_position.text = employee.position
             holder_email.text = employee.email
             holder_phone.text = employee.phone
+            holder_cv.setOnClickListener {
+                listener.selectEmployee(employee)
+            }
 
         }
-
     }
+
+    interface Listener {
+        fun selectEmployee(employee: EmployeeModel)
+    }
+
 }
