@@ -67,6 +67,14 @@ class ListFragment : Fragment(),
         }
     }
 
+    override fun markNewEmployeeSuccess() {
+
+    }
+
+    override fun markNewEmployeeNotExists() {
+
+    }
+
     override fun connError() {
 
     }

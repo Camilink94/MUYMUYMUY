@@ -16,6 +16,9 @@ class AllEmployeesListPresenterContract {
 
         fun setEmployees(employees: ArrayList<EmployeeModel>)
 
+        fun markNewEmployeeSuccess()
+        fun markNewEmployeeNotExists()
+
         fun connError()
         fun dataError()
     }
