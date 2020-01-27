@@ -15,16 +15,19 @@ class EmployeeDetailsPresenter(val view: EmployeeDetailsPresenterContract.IView)
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
     override fun getRespondingEmployes(employeeId: Int) {
+        view.showLoading()
         repository.getRespondingEmployees(employeeId)
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        view.showLoading()
         repository.markAsNew(employeeId, new)
     }
 
     //region Repo
     override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
         view.setRespondingEmployees(employees)
+        view.hideLoading()
     }
 
     override fun connError() {
@@ -34,9 +37,11 @@ class EmployeeDetailsPresenter(val view: EmployeeDetailsPresenterContract.IView)
     }
 
     override fun markNewEmployeeSuccess() {
+        view.hideLoading()
     }
 
     override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
+        view.hideLoading()
     }
     //endregion
 
