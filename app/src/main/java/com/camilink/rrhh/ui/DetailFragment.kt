@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 
 import com.camilink.rrhh.R
+import com.camilink.rrhh.models.EmployeeModel
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -18,7 +20,8 @@ class DetailFragment : Fragment() {
     private var param2: String? = null
     private var listener: Listener? = null
 
-
+    val args: DetailFragmentArgs by navArgs()
+    val employee = args.employee
 
     //region OnCreate(View)
     override fun onCreate(savedInstanceState: Bundle?) {
