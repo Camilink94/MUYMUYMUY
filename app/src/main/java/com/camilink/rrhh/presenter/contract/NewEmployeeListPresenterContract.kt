@@ -9,7 +9,7 @@ class NewEmployeeListPresenterContract {
         fun getNewEmployees()
     }
 
-    interface IView {
+    interface IView : BaseView {
 
         fun setNewEmployees(employees: ArrayList<EmployeeModel>)
     }

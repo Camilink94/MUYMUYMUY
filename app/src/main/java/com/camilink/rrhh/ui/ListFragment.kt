@@ -68,6 +68,13 @@ class ListFragment : Fragment(),
             addAll(employees)
             notifyDataSetChanged()
         }
+
+        var cacheBool = false
+        for (employee in employees) {
+            cacheBool = cacheBool || employee.isNew
+            if (cacheBool) break
+        }
+        list_showNewBtn.visibility = if (cacheBool) View.VISIBLE else View.GONE
     }
 
     override fun markNewEmployeeSuccess() {

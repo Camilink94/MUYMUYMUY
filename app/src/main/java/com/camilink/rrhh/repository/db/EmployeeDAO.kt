@@ -12,6 +12,9 @@ interface EmployeeDAO {
     @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} WHERE ${EmployeeModel.idColumnName} = :employeeId")
     fun getSingle(employeeId: Int): EmployeeModel?
 
+    @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} WHERE ${EmployeeModel.newColumnName} = 1")
+    fun getNewEmployees(): List<EmployeeModel>
+
     @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} WHERE ${EmployeeModel.upperRelationColumnName} = :employeeId")
     fun getRespondingEmployees(employeeId: Int): List<EmployeeModel>
 

@@ -3,8 +3,10 @@ package com.camilink.rrhh.di
 import androidx.room.Room
 import com.camilink.rrhh.presenter.AllEmployeeListPresenter
 import com.camilink.rrhh.presenter.EmployeeDetailsPresenter
+import com.camilink.rrhh.presenter.NewEmployeeListPresenter
 import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import com.camilink.rrhh.presenter.contract.EmployeeDetailsPresenterContract
+import com.camilink.rrhh.presenter.contract.NewEmployeeListPresenterContract
 import com.camilink.rrhh.repository.EmployeeRepository
 import com.camilink.rrhh.repository.db.EmployeeRoomDatabase
 import com.camilink.rrhh.repository.service.EmployeeService
@@ -17,6 +19,12 @@ val appModule = module {
     factory<AllEmployeesListPresenterContract.IPresenter> { (view: AllEmployeesListPresenterContract.IView) ->
         AllEmployeeListPresenter(view)
     }
+
+    //Presenter new
+    factory<NewEmployeeListPresenterContract.IPresenter> { (view: NewEmployeeListPresenterContract.IView) ->
+        NewEmployeeListPresenter(view)
+    }
+
 
     //Presenter Details
     factory<EmployeeDetailsPresenterContract.IPresenter> { (view: EmployeeDetailsPresenterContract.IView) ->
