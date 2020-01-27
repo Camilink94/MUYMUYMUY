@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.camilink.rrhh.models.EmployeeModel
 
 @Database(entities = [EmployeeModel::class], version = 1)
-abstract class EmployeeDatabase : RoomDatabase() {
+abstract class EmployeeRoomDatabase : RoomDatabase() {
 
     abstract fun employeeDAO(): EmployeeDAO
 
