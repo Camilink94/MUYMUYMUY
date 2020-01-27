@@ -2,30 +2,27 @@ package com.camilink.rrhh.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.camilink.rrhh.R
+import com.camilink.rrhh.models.EmployeeModel
 import kotlinx.android.synthetic.main.fragment_list.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ListFragment.Listener] interface
- * to handle interaction events.
- * Use the [ListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
     private var listener: Listener? = null
+
+    private val adapter: EmployeeListAdapter = EmployeeListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +44,25 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         list_showNewBtn.setOnClickListener { seeNewEmployees() }
+        list_allRv.apply {
+            layoutManager =
+                LinearLayoutManager(this@ListFragment.context, LinearLayoutManager.VERTICAL, false)
+            adapter = this@ListFragment.adapter
+        }
     }
 
     private fun seeNewEmployees() {
         val action = ListFragmentDirections.actionListFragmentToNewEmployeesFragment()
         findNavController().navigate(action)
+    }
+
+    fun setLatestEmployees(employees: ArrayList<EmployeeModel>) {
+        Log.d("AAAA", "Recieved ${employees.size} employees:\n$employees")
+
+        (list_allRv.adapter as EmployeeListAdapter).apply {
+            addAll(employees)
+            notifyDataSetChanged()
+        }
     }
 
     //region Attach Listener
