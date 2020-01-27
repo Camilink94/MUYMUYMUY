@@ -19,7 +19,7 @@ class EmployeeDetailsPresenter(val view: EmployeeDetailsPresenterContract.IView)
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
-
+        repository.markAsNew(employeeId, new)
     }
 
     //region Repo

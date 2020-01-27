@@ -59,7 +59,7 @@ class NewEmployeesFragment : Fragment(),
     }
 
     override fun markNewEmployeeSuccess() {
-
+        //presenter.getNewEmployees()
     }
 
     override fun markNewEmployeeNotExists(employeeId: Int) {
