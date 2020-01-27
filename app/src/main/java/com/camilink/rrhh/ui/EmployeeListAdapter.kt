@@ -41,6 +41,8 @@ class EmployeeListAdapter(val listener: Listener) :
             holder_position.text = employee.position
             holder_email.text = employee.email
             holder_phone.text = employee.phone
+            holder_new.isChecked = employee.new
+
             holder_cv.setOnClickListener {
                 listener.selectEmployee(employee)
             }

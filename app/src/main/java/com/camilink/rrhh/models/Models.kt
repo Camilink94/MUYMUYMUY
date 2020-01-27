@@ -12,5 +12,6 @@ data class EmployeeModel(
     val salary: String = "",
     val phone: String = "",
     val email: String = "",
-    @ColumnInfo(name = "upper_relation") val upperRelation: Int = 0
+    @ColumnInfo(name = "upper_relation") val upperRelation: Int = 0,
+    val new: Boolean = false
 )
