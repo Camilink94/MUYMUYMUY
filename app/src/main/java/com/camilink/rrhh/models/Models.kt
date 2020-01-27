@@ -17,6 +17,11 @@ data class EmployeeModel(
     var salary: String = "",
     var phone: String = "",
     var email: String = "",
-    @ColumnInfo(name = "upper_relation") var upperRelation: Int = 0,
+    @ColumnInfo(name = upperRelationColumnName) var upperRelation: Int = 0,
     var new: Boolean = false
-) : Parcelable
+) : Parcelable {
+    companion object {
+        const val idColumnName = "id"
+        const val upperRelationColumnName = "upper_relation"
+    }
+}
