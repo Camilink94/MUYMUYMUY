@@ -30,6 +30,15 @@ class EmployeeRepository(private val listener: Listener) :
         service.getEmployees()
     }
 
+    fun getRespondingEmployees(employeeId: Int) {
+        doAsync {
+            val respondingEmployees = database.getRespondingEmployees(employeeId)
+            uiThread {
+                gotEmployees(respondingEmployees as ArrayList<EmployeeModel>)
+            }
+        }
+    }
+
     fun markAsNew(employeeId: Int, new: Boolean) {
         doAsync {
             val cacheEmployee = database.getEmployee(employeeId)

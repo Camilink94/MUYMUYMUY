@@ -15,7 +15,7 @@ class EmployeeDetailsPresenter(val view: EmployeeDetailsPresenterContract.IView)
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
     override fun getRespondingEmployes(employeeId: Int) {
-
+        repository.getRespondingEmployees(employeeId)
     }
 
     override fun markNewEmployee(employeeId: Int, new: Boolean) {
@@ -24,7 +24,7 @@ class EmployeeDetailsPresenter(val view: EmployeeDetailsPresenterContract.IView)
 
     //region Repo
     override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
-
+        view.setRespondingEmployees(employees)
     }
 
     override fun connError() {

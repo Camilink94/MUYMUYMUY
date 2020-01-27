@@ -38,13 +38,19 @@ class ListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        list_reload.setOnClickListener { reloadEmployees() }
         list_showNewBtn.setOnClickListener { seeNewEmployees() }
+
         list_allRv.apply {
             layoutManager =
                 LinearLayoutManager(this@ListFragment.context, LinearLayoutManager.VERTICAL, false)
             adapter = EmployeeListAdapter(this@ListFragment)
         }
 
+        presenter.getLatestEmployees()
+    }
+
+    private fun reloadEmployees() {
         presenter.getLatestEmployees()
     }
 
@@ -58,6 +64,7 @@ class ListFragment : Fragment(),
         Log.d("AAAA", "Recieved ${employees.size} employees:\n$employees")
 
         (list_allRv.adapter as EmployeeListAdapter).apply {
+            clearAll()
             addAll(employees)
             notifyDataSetChanged()
         }

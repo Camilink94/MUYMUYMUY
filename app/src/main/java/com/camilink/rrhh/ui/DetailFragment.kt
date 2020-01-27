@@ -2,24 +2,28 @@ package com.camilink.rrhh.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
 import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import com.camilink.rrhh.presenter.contract.EmployeeDetailsPresenterContract
 import kotlinx.android.synthetic.main.fragment_detail.*
+import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 class DetailFragment : Fragment(),
     KoinComponent,
-    EmployeeDetailsPresenterContract.IView {
+    EmployeeDetailsPresenterContract.IView, EmployeeListAdapter.Listener {
 
     private var listener: Listener? = null
 
@@ -46,13 +50,30 @@ class DetailFragment : Fragment(),
         detail_new.isChecked = employee.isNew
 
         detail_new.setOnCheckedChangeListener { buttonView, isChecked ->
-
+            presenter.markNewEmployee(employee.id, isChecked)
         }
+
+        detail_rv.apply {
+            layoutManager =
+                LinearLayoutManager(
+                    this@DetailFragment.context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+            adapter = EmployeeListAdapter(this@DetailFragment)
+        }
+
+        presenter.getRespondingEmployes(employeeId = employee.id)
     }
 
     //region View
     override fun setRespondingEmployees(employees: ArrayList<EmployeeModel>) {
-
+        Log.d("AAAA", "AAAAA")
+        (detail_rv.adapter as EmployeeListAdapter).apply {
+            clearAll()
+            addAll(employees)
+            notifyDataSetChanged()
+        }
     }
 
     override fun markNewEmployeeSuccess() {
@@ -69,6 +90,17 @@ class DetailFragment : Fragment(),
 
     override fun hideLoading() {
 
+    }
+    //endregion
+
+    //region Adapter Listener
+    override fun selectEmployee(employee: EmployeeModel) {
+        val action = DetailFragmentDirections.actionDetailFragmentSelf(employee)
+        findNavController().navigate(action)
+    }
+
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        presenter.markNewEmployee(employeeId, new)
     }
     //endregion
 
