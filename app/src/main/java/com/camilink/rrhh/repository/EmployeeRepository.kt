@@ -17,8 +17,58 @@ class EmployeeRepository(private val listener: Listener) :
     private val service by inject<EmployeeService> { parametersOf(this) }
     private val database = EmployeeDatabaseEntryPoint()
 
+    fun getEmployees() {
+        doAsync {
+            val dbEmployees = database.getAllEmployees()
+            uiThread {
+                if (dbEmployees.isNotEmpty()) {
+                    listener.gotEmployees(dbEmployees as ArrayList<EmployeeModel>)
+                } else {
+                    getLatestEmployees()
+                }
+            }
+        }
+    }
+
     fun getLatestEmployees() {
         service.getEmployees()
+    }
+
+    fun getNewEmployees() {
+        doAsync {
+            val news = database.getNewEmployees()
+            uiThread {
+                listener.gotEmployees(news as ArrayList<EmployeeModel>)
+            }
+        }
+    }
+
+    fun getRespondingEmployees(employeeId: Int) {
+        doAsync {
+            val respondingEmployees = database.getRespondingEmployees(employeeId)
+            uiThread {
+                gotEmployees(respondingEmployees as ArrayList<EmployeeModel>)
+            }
+        }
+    }
+
+    fun markAsNew(employeeId: Int, new: Boolean) {
+        doAsync {
+            Log.d("AAAA", "Getting $employeeId")
+            val cacheEmployee = database.getEmployee(employeeId)
+            cacheEmployee?.let {
+                Log.d("AAAA", "Got ${it.id}")
+                it.isNew = new
+                database.updateSingleEmployee(it)
+            }
+            uiThread {
+                if (cacheEmployee == null) {
+                    listener.markNewEmployeeNotExists(employeeId, new)
+                } else {
+                    listener.markNewEmployeeSuccess()
+                }
+            }
+        }
     }
 
     //region Service Listener
@@ -34,7 +84,7 @@ class EmployeeRepository(private val listener: Listener) :
                     database.updateSingleEmployee(
                         employeeFromService.apply {
                             //Keep new state from cached row
-                            new = cacheEmployee.new
+                            isNew = cacheEmployee.isNew
                         }
                     )
                 }
@@ -60,6 +110,9 @@ class EmployeeRepository(private val listener: Listener) :
         fun gotEmployees(employees: ArrayList<EmployeeModel>)
         fun connError()
         fun dataError()
+
+        fun markNewEmployeeSuccess()
+        fun markNewEmployeeNotExists(employeeId: Int, new: Boolean)
     }
 
 }

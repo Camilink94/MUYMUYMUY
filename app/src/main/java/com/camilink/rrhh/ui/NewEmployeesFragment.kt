@@ -6,42 +6,91 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.camilink.rrhh.R
+import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
+import com.camilink.rrhh.presenter.contract.NewEmployeeListPresenterContract
+import kotlinx.android.synthetic.main.fragment_new_employees.*
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class NewEmployeesFragment : Fragment(),
+    KoinComponent,
+    NewEmployeeListPresenterContract.IView,
+    EmployeeListAdapter.Listener {
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [NewEmployeesFragment.Listener] interface
- * to handle interaction events.
- * Use the [NewEmployeesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class NewEmployeesFragment : Fragment() {
-
-    private var param1: String? = null
-    private var param2: String? = null
     private var listener: Listener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    val presenter: NewEmployeeListPresenterContract.IPresenter by inject { parametersOf(this) }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_new_employees, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        new_allRv.apply {
+            layoutManager =
+                LinearLayoutManager(
+                    this@NewEmployeesFragment.context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+            adapter = EmployeeListAdapter(this@NewEmployeesFragment)
+        }
+
+        presenter.getNewEmployees()
+    }
+
+    //region View
+    override fun setNewEmployees(employees: ArrayList<EmployeeModel>) {
+        (new_allRv.adapter as EmployeeListAdapter).apply {
+            clearAll()
+            addAll(employees)
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun markNewEmployeeSuccess() {
+        //presenter.getNewEmployees()
+    }
+
+    override fun markNewEmployeeNotExists(employeeId: Int) {
+
+    }
+
+    override fun showLoading() {
+
+    }
+
+    override fun hideLoading() {
+
+    }
+    //endregion
+
+    //region Adapter Listener
+    override fun selectEmployee(employee: EmployeeModel) {
+        val action =
+            NewEmployeesFragmentDirections.actionNewEmployeesFragmentToDetailFragment(employee)
+        findNavController().navigate(action)
+    }
+
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        presenter.markNewEmployee(employeeId, new)
+    }
+    //endregion
+
+    interface Listener {
+    }
+
+    //region Attach Listener
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Listener) {
@@ -55,37 +104,5 @@ class NewEmployeesFragment : Fragment() {
         super.onDetach()
         listener = null
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface Listener {
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NewEmployeesFragment.
-         */
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NewEmployeesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+    //endregion
 }

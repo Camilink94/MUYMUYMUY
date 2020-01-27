@@ -22,4 +22,9 @@ class EmployeeDatabaseEntryPoint : KoinComponent {
 
     fun getAllEmployees() = roomDatabase.employeeDAO().getAll()
 
+    fun getRespondingEmployees(employeeId: Int) =
+        roomDatabase.employeeDAO().getRespondingEmployees(employeeId)
+
+    fun getNewEmployees() = roomDatabase.employeeDAO().getNewEmployees()
+
 }

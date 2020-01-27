@@ -11,46 +11,47 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import kotlinx.android.synthetic.main.fragment_list.*
+import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.parameter.parametersOf
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ListFragment : Fragment(),
+    KoinComponent,
+    AllEmployeesListPresenterContract.IView,
+    EmployeeListAdapter.Listener {
 
-class ListFragment : Fragment(), EmployeeListAdapter.Listener {
-
-    private var param1: String? = null
-    private var param2: String? = null
-    private var listener: Listener? = null
-
-    private val adapter: EmployeeListAdapter = EmployeeListAdapter(this)
-
-    //region OnCreate(View)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val presenter: AllEmployeesListPresenterContract.IPresenter by inject {
+        parametersOf(this)
     }
 
+    private var listener: Listener? = null
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
-    //endregion
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        list_reload.setOnClickListener { reloadEmployees() }
         list_showNewBtn.setOnClickListener { seeNewEmployees() }
+
         list_allRv.apply {
             layoutManager =
                 LinearLayoutManager(this@ListFragment.context, LinearLayoutManager.VERTICAL, false)
-            adapter = this@ListFragment.adapter
+            adapter = EmployeeListAdapter(this@ListFragment)
         }
+
+        presenter.getLatestEmployees()
+    }
+
+    private fun reloadEmployees() {
+        presenter.getLatestEmployees()
     }
 
     private fun seeNewEmployees() {
@@ -58,22 +59,65 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         findNavController().navigate(action)
     }
 
-    fun setLatestEmployees(employees: ArrayList<EmployeeModel>) {
+    //region View
+    override fun setEmployees(employees: ArrayList<EmployeeModel>) {
         Log.d("AAAA", "Recieved ${employees.size} employees:\n$employees")
 
         (list_allRv.adapter as EmployeeListAdapter).apply {
+            clearAll()
             addAll(employees)
+            notifyDataSetChanged()
+        }
+
+        var cacheBool = false
+        for (employee in employees) {
+            cacheBool = cacheBool || employee.isNew
+            if (cacheBool) break
+        }
+        list_showNewBtn.visibility = if (cacheBool) View.VISIBLE else View.GONE
+    }
+
+    override fun markNewEmployeeSuccess() {
+
+    }
+
+    override fun markNewEmployeeNotExists(employeeId: Int, new: Boolean) {
+        (list_allRv.adapter as EmployeeListAdapter).apply {
+            employees.find { id == employeeId }?.isNew = !new
             notifyDataSetChanged()
         }
     }
 
+    override fun connError() {
+
+    }
+
+    override fun dataError() {
+
+    }
+
+    override fun showLoading() {
+
+    }
+
+    override fun hideLoading() {
+
+    }
+    //endregion
+
+    //region Adapter Listener
     override fun selectEmployee(employee: EmployeeModel) {
         val action = ListFragmentDirections.actionListFragmentToDetailFragment(employee)
         findNavController().navigate(action)
     }
 
-    interface Listener {
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        Log.d("AAAA","Mark from fragment")
+        presenter.markNewEmployee(employeeId, new)
+    }
+    //endregion
 
+    interface Listener {
     }
 
     //region Attach Listener
@@ -89,17 +133,6 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
     //endregion
 }

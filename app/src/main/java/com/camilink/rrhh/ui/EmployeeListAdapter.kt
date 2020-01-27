@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.holder_employee.*
 class EmployeeListAdapter(val listener: Listener) :
     RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>() {
 
-    private val employees = ArrayList<EmployeeModel>()
+    val employees = ArrayList<EmployeeModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -41,10 +41,14 @@ class EmployeeListAdapter(val listener: Listener) :
             holder_position.text = employee.position
             holder_email.text = employee.email
             holder_phone.text = employee.phone
-            holder_new.isChecked = employee.new
+            holder_new.isChecked = employee.isNew
 
             holder_cv.setOnClickListener {
                 listener.selectEmployee(employee)
+            }
+
+            holder_new.setOnCheckedChangeListener { buttonView, isChecked ->
+                listener.markNewEmployee(employeeId = employee.id, new = isChecked)
             }
 
         }
@@ -52,6 +56,7 @@ class EmployeeListAdapter(val listener: Listener) :
 
     interface Listener {
         fun selectEmployee(employee: EmployeeModel)
+        fun markNewEmployee(employeeId: Int, new: Boolean)
     }
 
 }

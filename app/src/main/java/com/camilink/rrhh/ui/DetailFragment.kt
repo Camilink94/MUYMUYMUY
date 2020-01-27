@@ -2,42 +2,105 @@ package com.camilink.rrhh.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
+import com.camilink.rrhh.presenter.contract.EmployeeDetailsPresenterContract
+import kotlinx.android.synthetic.main.fragment_detail.*
+import kotlinx.android.synthetic.main.fragment_list.*
+import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.parameter.parametersOf
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class DetailFragment : Fragment(),
+    KoinComponent,
+    EmployeeDetailsPresenterContract.IView, EmployeeListAdapter.Listener {
 
-class DetailFragment : Fragment() {
-
-    private var param1: String? = null
-    private var param2: String? = null
     private var listener: Listener? = null
 
-    val args: DetailFragmentArgs by navArgs()
-    val employee = args.employee
+    private val args: DetailFragmentArgs by navArgs()
+    lateinit var employee: EmployeeModel
 
-    //region OnCreate(View)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val presenter: EmployeeDetailsPresenterContract.IPresenter by inject {
+        parametersOf(this)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        employee = args.employee
+
+        detail_name.text = employee.name
+        detail_position.text = employee.position
+        detail_new.isChecked = employee.isNew
+
+        detail_new.setOnCheckedChangeListener { buttonView, isChecked ->
+            presenter.markNewEmployee(employee.id, isChecked)
+        }
+
+        detail_rv.apply {
+            layoutManager =
+                LinearLayoutManager(
+                    this@DetailFragment.context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+            adapter = EmployeeListAdapter(this@DetailFragment)
+        }
+
+        presenter.getRespondingEmployes(employeeId = employee.id)
+    }
+
+    //region View
+    override fun setRespondingEmployees(employees: ArrayList<EmployeeModel>) {
+        Log.d("AAAA", "AAAAA")
+        (detail_rv.adapter as EmployeeListAdapter).apply {
+            clearAll()
+            addAll(employees)
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun markNewEmployeeSuccess() {
+
+    }
+
+    override fun markNewEmployeeNotExists(employeeId: Int) {
+
+    }
+
+    override fun showLoading() {
+
+    }
+
+    override fun hideLoading() {
+
+    }
+    //endregion
+
+    //region Adapter Listener
+    override fun selectEmployee(employee: EmployeeModel) {
+        val action = DetailFragmentDirections.actionDetailFragmentSelf(employee)
+        findNavController().navigate(action)
+    }
+
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        presenter.markNewEmployee(employeeId, new)
     }
     //endregion
 
@@ -57,18 +120,6 @@ class DetailFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
     //endregion
 }

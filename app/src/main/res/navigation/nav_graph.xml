@@ -25,6 +25,9 @@
         <argument
             android:name="employee"
             app:argType="com.camilink.rrhh.models.EmployeeModel" />
+        <action
+            android:id="@+id/action_detailFragment_self"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/newEmployeesFragment"
