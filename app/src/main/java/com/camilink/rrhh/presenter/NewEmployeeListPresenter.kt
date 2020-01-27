@@ -15,7 +15,11 @@ class NewEmployeeListPresenter(val view: NewEmployeeListPresenterContract.IView)
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
     override fun getNewEmployees() {
+        repository.getNewEmployees()
+    }
 
+    override fun markNewEmployee(employeeId: Int, new: Boolean) {
+        repository.markAsNew(employeeId, new)
     }
 
     override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
@@ -23,18 +27,18 @@ class NewEmployeeListPresenter(val view: NewEmployeeListPresenterContract.IView)
     }
 
     override fun connError() {
-        
+
     }
 
     override fun dataError() {
-        
+
     }
 
     override fun markNewEmployeeSuccess() {
-        
+
     }
 
     override fun markNewEmployeeNotExists() {
-        
+
     }
 }
