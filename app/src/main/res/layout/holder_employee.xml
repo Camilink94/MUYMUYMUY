@@ -14,7 +14,7 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/holder_id"
+            android:id="@+id/holder_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -38,9 +38,9 @@
             android:lines="1"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/holder_email"
-            app:layout_constraintEnd_toEndOf="@+id/holder_id"
-            app:layout_constraintStart_toStartOf="@+id/holder_id"
-            app:layout_constraintTop_toBottomOf="@+id/holder_id"
+            app:layout_constraintEnd_toEndOf="@+id/holder_name"
+            app:layout_constraintStart_toStartOf="@+id/holder_name"
+            app:layout_constraintTop_toBottomOf="@+id/holder_name"
             tools:text="CEO/Meme" />
 
         <TextView

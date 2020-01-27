@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.holder_employee.*
 
 class EmployeeListAdapter : RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>() {
 
@@ -28,9 +30,15 @@ class EmployeeListAdapter : RecyclerView.Adapter<EmployeeListAdapter.ViewHolder>
         employees.addAll(newEmployees)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+        LayoutContainer {
 
         fun bindHolder(employee: EmployeeModel) {
+
+            holder_name.text = employee.name
+            holder_position.text = employee.position
+            holder_email.text = employee.email
+            holder_phone.text = employee.phone
 
         }
 
