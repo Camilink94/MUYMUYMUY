@@ -1,22 +1,50 @@
 package com.camilink.rrhh.repository
 
+import android.util.Log
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.repository.db.EmployeeDatabaseEntryPoint
 import com.camilink.rrhh.repository.service.EmployeeService
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
-class EmployeeRepository(private val listener: Listener) : KoinComponent, EmployeeService.Listener {
+class EmployeeRepository(private val listener: Listener) :
+    KoinComponent,
+    EmployeeService.Listener {
 
     private val service by inject<EmployeeService> { parametersOf(this) }
+    private val database = EmployeeDatabaseEntryPoint()
 
     fun getLatestEmployees() {
         service.getEmployees()
     }
 
     //region Service Listener
-    override fun gotEmployees(employees: ArrayList<EmployeeModel>) {
-        listener.gotEmployees(employees)
+    override fun gotEmployees(employeesFromService: ArrayList<EmployeeModel>) {
+        doAsync {
+            for (employeeFromService in employeesFromService) {
+                val cacheEmployee = database.getEmployee(employeeFromService.id)
+                if (cacheEmployee == null) {
+                    //If null, it doesn't exist, insert new
+                    database.insertSingleEmployee(employeeFromService)
+                } else {
+                    //Not null, already exist. Update
+                    database.updateSingleEmployee(
+                        employeeFromService.apply {
+                            //Keep new state from cached row
+                            new = cacheEmployee.new
+                        }
+                    )
+                }
+            }
+
+            val allEmployees = database.getAllEmployees()
+            uiThread {
+                listener.gotEmployees(allEmployees as ArrayList<EmployeeModel>)
+            }
+        }
     }
 
     override fun connError() {

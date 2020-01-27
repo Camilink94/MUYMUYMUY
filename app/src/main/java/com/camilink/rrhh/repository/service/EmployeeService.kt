@@ -57,7 +57,7 @@ class EmployeeService(private val listener: Listener) {
     }
 
     interface Listener {
-        fun gotEmployees(employees: ArrayList<EmployeeModel>)
+        fun gotEmployees(employeesFromService: ArrayList<EmployeeModel>)
         fun connError()
         fun dataError()
     }
