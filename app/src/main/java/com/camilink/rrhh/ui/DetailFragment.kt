@@ -10,9 +10,12 @@ import androidx.navigation.fragment.navArgs
 
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import com.camilink.rrhh.presenter.contract.EmployeeDetailsPresenterContract
 import kotlinx.android.synthetic.main.fragment_detail.*
+import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 class DetailFragment : Fragment(),
     KoinComponent,
@@ -22,6 +25,10 @@ class DetailFragment : Fragment(),
 
     private val args: DetailFragmentArgs by navArgs()
     lateinit var employee: EmployeeModel
+
+    private val presenter: EmployeeDetailsPresenterContract.IPresenter by inject {
+        parametersOf(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

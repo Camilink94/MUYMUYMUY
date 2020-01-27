@@ -2,7 +2,9 @@ package com.camilink.rrhh.di
 
 import androidx.room.Room
 import com.camilink.rrhh.presenter.AllEmployeeListPresenter
+import com.camilink.rrhh.presenter.EmployeeDetailsPresenter
 import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
+import com.camilink.rrhh.presenter.contract.EmployeeDetailsPresenterContract
 import com.camilink.rrhh.repository.EmployeeRepository
 import com.camilink.rrhh.repository.db.EmployeeRoomDatabase
 import com.camilink.rrhh.repository.service.EmployeeService
@@ -11,9 +13,14 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    //Presenter
+    //Presenter List All
     factory<AllEmployeesListPresenterContract.IPresenter> { (view: AllEmployeesListPresenterContract.IView) ->
         AllEmployeeListPresenter(view)
+    }
+
+    //Presenter Details
+    factory<EmployeeDetailsPresenterContract.IPresenter> { (view: EmployeeDetailsPresenterContract.IView) ->
+        EmployeeDetailsPresenter(view)
     }
 
     //Repository

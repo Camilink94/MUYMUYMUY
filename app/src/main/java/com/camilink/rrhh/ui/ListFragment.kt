@@ -23,9 +23,7 @@ class ListFragment : Fragment(),
     EmployeeListAdapter.Listener {
 
     private val presenter: AllEmployeesListPresenterContract.IPresenter by inject {
-        parametersOf(
-            this
-        )
+        parametersOf(this)
     }
 
     private var listener: Listener? = null
