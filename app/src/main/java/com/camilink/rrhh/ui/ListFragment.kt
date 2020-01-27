@@ -24,6 +24,7 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
 
     private val adapter: EmployeeListAdapter = EmployeeListAdapter(this)
 
+    //region OnCreate(View)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,6 +40,7 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
+    //endregion
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,6 +72,10 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         findNavController().navigate(action)
     }
 
+    interface Listener {
+
+    }
+
     //region Attach Listener
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,11 +90,6 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
         super.onDetach()
         listener = null
     }
-    //endregion
-
-    interface Listener {
-
-    }
 
     companion object {
         @JvmStatic
@@ -100,4 +101,5 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
                 }
             }
     }
+    //endregion
 }
