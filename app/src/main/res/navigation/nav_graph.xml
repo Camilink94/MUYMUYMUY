@@ -21,7 +21,11 @@
         android:id="@+id/detailFragment"
         android:name="com.camilink.rrhh.ui.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="employee"
+            app:argType="com.camilink.rrhh.models.EmployeeModel" />
+    </fragment>
     <fragment
         android:id="@+id/newEmployeesFragment"
         android:name="com.camilink.rrhh.ui.NewEmployeesFragment"

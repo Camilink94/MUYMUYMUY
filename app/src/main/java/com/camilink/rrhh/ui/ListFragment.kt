@@ -66,7 +66,7 @@ class ListFragment : Fragment(), EmployeeListAdapter.Listener {
     }
 
     override fun selectEmployee(employee: EmployeeModel) {
-        val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+        val action = ListFragmentDirections.actionListFragmentToDetailFragment(employee)
         findNavController().navigate(action)
     }
 
