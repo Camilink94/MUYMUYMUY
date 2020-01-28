@@ -2,12 +2,19 @@ package com.camilink.rrhh.repository.db
 
 import androidx.room.*
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.util.ListOrder
 
 @Dao
 interface EmployeeDAO {
 
     @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName}")
     fun getAll(): List<EmployeeModel>
+
+    @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} ORDER BY ${EmployeeModel.salaryColumnName} ASC")
+    fun getAllAsc(): List<EmployeeModel>
+
+    @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} ORDER BY ${EmployeeModel.salaryColumnName} DESC")
+    fun getAllDesc(): List<EmployeeModel>
 
     @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} WHERE ${EmployeeModel.nameColumnName} LIKE :query")
     fun getFilter(query: String): List<EmployeeModel>

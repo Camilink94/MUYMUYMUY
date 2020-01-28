@@ -4,6 +4,7 @@ import android.util.Log
 import com.camilink.rrhh.models.EmployeeModel
 import com.camilink.rrhh.repository.db.EmployeeDatabaseEntryPoint
 import com.camilink.rrhh.repository.service.EmployeeService
+import com.camilink.rrhh.util.ListOrder
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.koin.core.KoinComponent
@@ -17,14 +18,14 @@ class EmployeeRepository(private val listener: Listener) :
     private val service by inject<EmployeeService> { parametersOf(this) }
     private val database = EmployeeDatabaseEntryPoint()
 
-    fun getEmployees() {
+    fun getEmployees(order: ListOrder = ListOrder.NONE) {
         doAsync {
-            val dbEmployees = database.getAllEmployees()
+            val dbEmployees = database.getAllEmployees(order)
             uiThread {
                 if (dbEmployees.isNotEmpty()) {
                     listener.gotEmployees(dbEmployees as ArrayList<EmployeeModel>)
                 } else {
-                    getLatestEmployees()
+                    getLatestEmployees(order)
                 }
             }
         }
@@ -39,8 +40,8 @@ class EmployeeRepository(private val listener: Listener) :
         }
     }
 
-    fun getLatestEmployees() {
-        service.getEmployees()
+    fun getLatestEmployees(order: ListOrder = ListOrder.NONE) {
+        service.getEmployees(order)
     }
 
     fun getNewEmployees() {
@@ -81,7 +82,10 @@ class EmployeeRepository(private val listener: Listener) :
     }
 
     //region Service Listener
-    override fun gotEmployees(employeesFromService: ArrayList<EmployeeModel>) {
+    override fun gotEmployees(
+        employeesFromService: ArrayList<EmployeeModel>,
+        order: ListOrder
+    ) {
         doAsync {
             for (employeeFromService in employeesFromService) {
                 val cacheEmployee = database.getEmployee(employeeFromService.id)
@@ -99,7 +103,7 @@ class EmployeeRepository(private val listener: Listener) :
                 }
             }
 
-            val allEmployees = database.getAllEmployees()
+            val allEmployees = database.getAllEmployees(order)
             uiThread {
                 listener.gotEmployees(allEmployees as ArrayList<EmployeeModel>)
             }

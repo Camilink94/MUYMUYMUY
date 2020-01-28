@@ -1,6 +1,7 @@
 package com.camilink.rrhh.repository.db
 
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.util.ListOrder
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -20,7 +21,12 @@ class EmployeeDatabaseEntryPoint : KoinComponent {
 
     fun getEmployee(employeeId: Int) = roomDatabase.employeeDAO().getSingle(employeeId)
 
-    fun getAllEmployees() = roomDatabase.employeeDAO().getAll()
+    fun getAllEmployees(order: ListOrder = ListOrder.NONE): List<EmployeeModel> = when (order) {
+        ListOrder.NONE -> roomDatabase.employeeDAO().getAll()
+        ListOrder.ASCENDING -> roomDatabase.employeeDAO().getAllAsc()
+        ListOrder.DESCENDING -> roomDatabase.employeeDAO().getAllDesc()
+    }
+
 
     fun getFiltered(query: String) = roomDatabase.employeeDAO().getFilter("%$query%")
 

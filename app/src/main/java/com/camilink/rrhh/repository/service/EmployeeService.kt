@@ -3,6 +3,7 @@ package com.camilink.rrhh.repository.service
 import android.util.Log
 import com.camilink.rrhh.BuildConfig
 import com.camilink.rrhh.models.EmployeeModel
+import com.camilink.rrhh.util.ListOrder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -28,7 +29,7 @@ class EmployeeService(private val listener: Listener) {
 
     private val employeeService = retrofit.create(EmployeeServiceContract::class.java)
 
-    fun getEmployees() {
+    fun getEmployees(order: ListOrder = ListOrder.NONE) {
         employeeService.getEmployees().enqueue(
             object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
@@ -38,7 +39,8 @@ class EmployeeService(private val listener: Listener) {
                             listener.gotEmployees(
                                 EmployeeMapper.mapEmployees(
                                     response.body() ?: ""
-                                )
+                                ),
+                                order
                             )
                         } catch (ex: EmployeeMapper.EmployeeMapperException) {
                             listener.dataError()
@@ -57,7 +59,11 @@ class EmployeeService(private val listener: Listener) {
     }
 
     interface Listener {
-        fun gotEmployees(employeesFromService: ArrayList<EmployeeModel>)
+        fun gotEmployees(
+            employeesFromService: ArrayList<EmployeeModel>,
+            order: ListOrder = ListOrder.NONE
+        )
+
         fun connError()
         fun dataError()
     }
