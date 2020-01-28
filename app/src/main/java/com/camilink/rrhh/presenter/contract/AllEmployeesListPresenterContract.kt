@@ -2,12 +2,13 @@ package com.camilink.rrhh.presenter.contract
 
 import com.camilink.rrhh.models.EmployeeModel
 import com.camilink.rrhh.presenter.contract.BaseView
+import com.camilink.rrhh.util.ListOrder
 
 class AllEmployeesListPresenterContract {
 
     interface IPresenter {
 
-        fun getAllEmployees()
+        fun getAllEmployees(order: ListOrder = ListOrder.NONE)
         fun getLatestEmployees()
         fun getFiltered(query: String)
 

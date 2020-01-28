@@ -4,6 +4,7 @@ import android.util.Log
 import com.camilink.rrhh.models.EmployeeModel
 import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
 import com.camilink.rrhh.repository.EmployeeRepository
+import com.camilink.rrhh.util.ListOrder
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
@@ -16,9 +17,9 @@ class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContra
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
     //region Presenter
-    override fun getAllEmployees() {
+    override fun getAllEmployees(order: ListOrder) {
         view.showLoading()
-        repository.getEmployees()
+        repository.getEmployees(order)
     }
 
     override fun getLatestEmployees() {
