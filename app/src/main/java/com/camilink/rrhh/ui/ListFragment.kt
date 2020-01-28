@@ -33,6 +33,9 @@ class ListFragment : Fragment(),
 
     private val listOrders = ListOrder.values()
 
+    private var isSearching = false
+    private var query = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -79,7 +82,11 @@ class ListFragment : Fragment(),
     }
 
     private fun handleOrder(order: ListOrder) {
-        presenter.getAllEmployees(order)
+        if (isSearching) {
+            presenter.getFiltered(query, order)
+        } else {
+            presenter.getAllEmployees(order)
+        }
     }
 
     private fun reloadEmployees() {
@@ -97,11 +104,21 @@ class ListFragment : Fragment(),
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        presenter.getFiltered(newText)
+        if (newText.isNotBlank()) {
+            isSearching = true
+            query = newText
+            presenter.getFiltered(query)
+        } else {
+            isSearching = false
+            query = newText
+            presenter.getAllEmployees()
+        }
         return false
     }
 
     override fun onClose(): Boolean {
+        isSearching = false
+        query = ""
         presenter.getAllEmployees()
         return false
     }

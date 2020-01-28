@@ -10,7 +10,7 @@ class AllEmployeesListPresenterContract {
 
         fun getAllEmployees(order: ListOrder = ListOrder.NONE)
         fun getLatestEmployees()
-        fun getFiltered(query: String)
+        fun getFiltered(query: String, order: ListOrder = ListOrder.NONE)
 
         fun markNewEmployee(employeeId: Int, new: Boolean)
 

@@ -33,9 +33,9 @@ class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContra
         repository.markAsNew(employeeId, new)
     }
 
-    override fun getFiltered(query: String) {
+    override fun getFiltered(query: String, order: ListOrder) {
         view.showLoading()
-        repository.getFiltered(query)
+        repository.getFiltered(query, order)
     }
     //endregion
 
