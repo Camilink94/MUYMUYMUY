@@ -3,10 +3,10 @@ package com.camilink.rrhh.ui
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.SearchView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.camilink.rrhh.R
@@ -20,7 +20,7 @@ import org.koin.core.parameter.parametersOf
 class ListFragment : Fragment(),
     KoinComponent,
     AllEmployeesListPresenterContract.IView,
-    EmployeeListAdapter.Listener {
+    EmployeeListAdapter.Listener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private val presenter: AllEmployeesListPresenterContract.IPresenter by inject {
         parametersOf(this)
@@ -47,6 +47,9 @@ class ListFragment : Fragment(),
             adapter = EmployeeListAdapter(this@ListFragment)
         }
 
+        list_search.setOnQueryTextListener(this)
+        list_search.setOnCloseListener(this)
+
         presenter.getLatestEmployees()
     }
 
@@ -58,6 +61,22 @@ class ListFragment : Fragment(),
         val action = ListFragmentDirections.actionListFragmentToNewEmployeesFragment()
         findNavController().navigate(action)
     }
+
+    //region Search
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String): Boolean {
+        presenter.getFiltered(newText)
+        return false
+    }
+
+    override fun onClose(): Boolean {
+        presenter.getAllEmployees()
+        return false
+    }
+    //endregion
 
     //region View
     override fun setEmployees(employees: ArrayList<EmployeeModel>) {

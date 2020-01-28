@@ -22,6 +22,8 @@ class EmployeeDatabaseEntryPoint : KoinComponent {
 
     fun getAllEmployees() = roomDatabase.employeeDAO().getAll()
 
+    fun getFiltered(query: String) = roomDatabase.employeeDAO().getFilter("%$query%")
+
     fun getRespondingEmployees(employeeId: Int) =
         roomDatabase.employeeDAO().getRespondingEmployees(employeeId)
 
