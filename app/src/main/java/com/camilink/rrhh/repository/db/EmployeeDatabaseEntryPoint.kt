@@ -28,7 +28,11 @@ class EmployeeDatabaseEntryPoint : KoinComponent {
     }
 
 
-    fun getFiltered(query: String) = roomDatabase.employeeDAO().getFilter("%$query%")
+    fun getFiltered(query: String, order: ListOrder = ListOrder.NONE) = when (order) {
+        ListOrder.NONE -> roomDatabase.employeeDAO().getFilter("%$query%")
+        ListOrder.ASCENDING -> roomDatabase.employeeDAO().getFilterAsc("%$query%")
+        ListOrder.DESCENDING -> roomDatabase.employeeDAO().getFilterDesc("%$query%")
+    }
 
     fun getRespondingEmployees(employeeId: Int) =
         roomDatabase.employeeDAO().getRespondingEmployees(employeeId)

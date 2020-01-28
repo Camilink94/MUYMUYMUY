@@ -31,9 +31,9 @@ class EmployeeRepository(private val listener: Listener) :
         }
     }
 
-    fun getFiltered(query: String) {
+    fun getFiltered(query: String, order: ListOrder = ListOrder.NONE) {
         doAsync {
-            val filtered = database.getFiltered(query)
+            val filtered = database.getFiltered(query, order)
             uiThread {
                 listener.gotEmployees(filtered as ArrayList<EmployeeModel>)
             }
