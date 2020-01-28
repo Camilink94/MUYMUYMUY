@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class EmployeeModel(
     @PrimaryKey(autoGenerate = false) var id: Int = 0,
-    var name: String = "",
+    @ColumnInfo(name = nameColumnName) var name: String = "",
     var position: String = "",
     var salary: String = "",
     var phone: String = "",
@@ -21,6 +21,7 @@ data class EmployeeModel(
 ) : Parcelable {
     companion object {
         const val idColumnName = "id"
+        const val nameColumnName = "name"
         const val upperRelationColumnName = "upper_relation"
         const val newColumnName = "is_new"
     }

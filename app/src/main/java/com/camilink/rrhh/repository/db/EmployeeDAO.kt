@@ -9,6 +9,9 @@ interface EmployeeDAO {
     @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName}")
     fun getAll(): List<EmployeeModel>
 
+    @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} WHERE ${EmployeeModel.nameColumnName} LIKE :query")
+    fun getFilter(query: String): List<EmployeeModel>
+
     @Query("SELECT * FROM ${EmployeeRoomDatabase.employeeTableName} WHERE ${EmployeeModel.idColumnName} = :employeeId")
     fun getSingle(employeeId: Int): EmployeeModel?
 
