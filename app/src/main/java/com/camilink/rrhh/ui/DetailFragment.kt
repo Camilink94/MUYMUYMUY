@@ -47,6 +47,7 @@ class DetailFragment : Fragment(),
 
         detail_name.text = employee.name
         detail_position.text = employee.position
+        detail_salary.text = "$ ${employee.salary}"
         detail_new.isChecked = employee.isNew
 
         detail_new.setOnCheckedChangeListener { buttonView, isChecked ->
