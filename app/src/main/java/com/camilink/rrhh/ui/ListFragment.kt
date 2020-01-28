@@ -35,6 +35,7 @@ class ListFragment : Fragment(),
 
     private var isSearching = false
     private var query = ""
+    private var currentOrder: ListOrder = ListOrder.NONE
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -82,10 +83,12 @@ class ListFragment : Fragment(),
     }
 
     private fun handleOrder(order: ListOrder) {
+        currentOrder = order
+
         if (isSearching) {
-            presenter.getFiltered(query, order)
+            presenter.getFiltered(query, currentOrder)
         } else {
-            presenter.getAllEmployees(order)
+            presenter.getAllEmployees(currentOrder)
         }
     }
 
@@ -107,11 +110,11 @@ class ListFragment : Fragment(),
         if (newText.isNotBlank()) {
             isSearching = true
             query = newText
-            presenter.getFiltered(query)
+            presenter.getFiltered(query, currentOrder)
         } else {
             isSearching = false
             query = newText
-            presenter.getAllEmployees()
+            presenter.getAllEmployees(currentOrder)
         }
         return false
     }
@@ -119,7 +122,7 @@ class ListFragment : Fragment(),
     override fun onClose(): Boolean {
         isSearching = false
         query = ""
-        presenter.getAllEmployees()
+        presenter.getAllEmployees(currentOrder)
         return false
     }
     //endregion

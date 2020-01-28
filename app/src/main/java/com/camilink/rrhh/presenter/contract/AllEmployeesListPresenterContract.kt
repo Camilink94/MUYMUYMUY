@@ -8,9 +8,9 @@ class AllEmployeesListPresenterContract {
 
     interface IPresenter {
 
-        fun getAllEmployees(order: ListOrder = ListOrder.NONE)
+        fun getAllEmployees(order: ListOrder)
         fun getLatestEmployees()
-        fun getFiltered(query: String, order: ListOrder = ListOrder.NONE)
+        fun getFiltered(query: String, order: ListOrder)
 
         fun markNewEmployee(employeeId: Int, new: Boolean)
 
