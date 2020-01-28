@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/holder_cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:elevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightGrey"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/holder_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/holder_position"
+            app:layout_constraintEnd_toStartOf="@+id/holder_new"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Todd Howard" />
+
+        <TextView
+            android:id="@+id/holder_position"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/holder_salary"
+            app:layout_constraintEnd_toEndOf="@+id/holder_name"
+            app:layout_constraintStart_toStartOf="@+id/holder_name"
+            app:layout_constraintTop_toBottomOf="@+id/holder_name"
+            tools:text="CEO/Meme" />
+
+        <TextView
+            android:id="@+id/holder_salary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/holder_email"
+            app:layout_constraintEnd_toEndOf="@+id/holder_name"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/holder_name"
+            app:layout_constraintTop_toBottomOf="@+id/holder_position"
+            tools:text="A SHITTON OF MONEY" />
+
+        <TextView
+            android:id="@+id/holder_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:drawablePadding="12dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/black"
+            app:drawableTint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/holder_phone"
+            app:layout_constraintEnd_toEndOf="@+id/holder_position"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/holder_position"
+            app:layout_constraintTop_toBottomOf="@+id/holder_salary"
+            tools:text="todd@bethesda.com" />
+
+        <TextView
+            android:id="@+id/holder_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_phone_black_24dp"
+            android:drawablePadding="12dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/black"
+            app:drawableTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/holder_email"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/holder_email"
+            app:layout_constraintTop_toBottomOf="@+id/holder_email"
+            tools:text="+1 666" />
+
+        <CheckBox
+            android:id="@+id/holder_new"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:checked="true"
+            android:text="Nuevo"
+            android:textSize="18sp"
+            app:buttonTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
