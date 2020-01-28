@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.camilink.rrhh.R
 import com.camilink.rrhh.models.EmployeeModel
 import com.camilink.rrhh.presenter.contract.AllEmployeesListPresenterContract
+import com.camilink.rrhh.util.ListOrder
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent
@@ -28,6 +31,12 @@ class ListFragment : Fragment(),
 
     private var listener: Listener? = null
 
+    private val listOrders = ListOrder.values()
+
+    private var isSearching = false
+    private var query = ""
+    private var currentOrder: ListOrder = ListOrder.NONE
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -38,8 +47,28 @@ class ListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        list_reload.setOnClickListener { reloadEmployees() }
-        list_showNewBtn.setOnClickListener { seeNewEmployees() }
+        val orderAdapter = ArrayAdapter<ListOrder>(
+            context!!,
+            android.R.layout.simple_spinner_item,
+            listOrders
+        ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        list_orderSp.adapter = orderAdapter
+        list_orderSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                handleOrder(listOrders[position])
+            }
+        }
+
+        list_search.setOnQueryTextListener(this)
+        list_search.setOnCloseListener(this)
 
         list_allRv.apply {
             layoutManager =
@@ -47,10 +76,20 @@ class ListFragment : Fragment(),
             adapter = EmployeeListAdapter(this@ListFragment)
         }
 
-        list_search.setOnQueryTextListener(this)
-        list_search.setOnCloseListener(this)
+        list_reload.setOnClickListener { reloadEmployees() }
+        list_showNewBtn.setOnClickListener { seeNewEmployees() }
 
         presenter.getLatestEmployees()
+    }
+
+    private fun handleOrder(order: ListOrder) {
+        currentOrder = order
+
+        if (isSearching) {
+            presenter.getFiltered(query, currentOrder)
+        } else {
+            presenter.getAllEmployees(currentOrder)
+        }
     }
 
     private fun reloadEmployees() {
@@ -68,12 +107,22 @@ class ListFragment : Fragment(),
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        presenter.getFiltered(newText)
+        if (newText.isNotBlank()) {
+            isSearching = true
+            query = newText
+            presenter.getFiltered(query, currentOrder)
+        } else {
+            isSearching = false
+            query = newText
+            presenter.getAllEmployees(currentOrder)
+        }
         return false
     }
 
     override fun onClose(): Boolean {
-        presenter.getAllEmployees()
+        isSearching = false
+        query = ""
+        presenter.getAllEmployees(currentOrder)
         return false
     }
     //endregion

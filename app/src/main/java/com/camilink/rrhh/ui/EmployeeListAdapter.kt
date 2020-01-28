@@ -1,5 +1,6 @@
 package com.camilink.rrhh.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,10 +36,12 @@ class EmployeeListAdapter(val listener: Listener) :
         RecyclerView.ViewHolder(containerView),
         LayoutContainer {
 
+        @SuppressLint("SetTextI18n")
         fun bindHolder(employee: EmployeeModel) {
 
             holder_name.text = employee.name
             holder_position.text = employee.position
+            holder_salary.text = "$ ${employee.salary}"
             holder_email.text = employee.email
             holder_phone.text = employee.phone
             holder_new.isChecked = employee.isNew
@@ -47,7 +50,7 @@ class EmployeeListAdapter(val listener: Listener) :
                 listener.selectEmployee(employee)
             }
 
-            holder_new.setOnCheckedChangeListener { buttonView, isChecked ->
+            holder_new.setOnCheckedChangeListener { _, isChecked ->
                 listener.markNewEmployee(employeeId = employee.id, new = isChecked)
             }
 
