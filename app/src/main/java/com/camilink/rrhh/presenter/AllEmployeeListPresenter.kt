@@ -15,6 +15,7 @@ class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContra
 
     private val repository by inject<EmployeeRepository> { parametersOf(this) }
 
+    //region Presenter
     override fun getAllEmployees() {
         view.showLoading()
         repository.getEmployees()
@@ -29,6 +30,11 @@ class AllEmployeeListPresenter(private val view: AllEmployeesListPresenterContra
         view.showLoading()
         Log.d("AAAA", "Mark from presenter")
         repository.markAsNew(employeeId, new)
+    }
+
+    override fun getFiltered(query: String) {
+        view.showLoading()
+        repository.getFiltered(query)
     }
     //endregion
 

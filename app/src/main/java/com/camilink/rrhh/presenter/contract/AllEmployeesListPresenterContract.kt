@@ -9,6 +9,8 @@ class AllEmployeesListPresenterContract {
 
         fun getAllEmployees()
         fun getLatestEmployees()
+        fun getFiltered(query: String)
+
         fun markNewEmployee(employeeId: Int, new: Boolean)
 
     }
